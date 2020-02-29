@@ -35,11 +35,11 @@ namespace PrinterMFU
             printer = new ColorPrinter();
             scanner = new ScannerA4();
         }
-        public override void Copy(string PaperSource)
+    /*    public override void Copy(string PaperSource)
         {
             base.Copy(PaperSource);
             Console.WriteLine(scanner.GetType());
-        }
+        }*/
     }
     class ColorXeroxA3 : Xerox
     {
@@ -48,18 +48,17 @@ namespace PrinterMFU
             printer = new ColorPrinter();
             scanner = new ScannerA3();
         }
-        public override void Copy(string PaperSource)
+      /*  public override void Copy(string PaperSource)
         {
             base.Copy(PaperSource);
             Console.WriteLine(scanner.GetType());
-        }
+        }*/
     }
 
     abstract class MFU
     {
         public MyPrinter printer;
         public MyScanner scanner;
-        public Xerox xerox;
       
         public void Print(string someFile)
         {
@@ -71,7 +70,7 @@ namespace PrinterMFU
         }
         public void Copy(string PaperSource)
         {
-            this.xerox.Copy(PaperSource);
+            this.printer.Print(this.scanner.Scan(PaperSource));
         }
     }
 
@@ -81,7 +80,6 @@ namespace PrinterMFU
         {
             printer = colorPrinter;
             scanner = scannerA4;
-            xerox = colorXeroxA;
         }
     }
     //preconditions
