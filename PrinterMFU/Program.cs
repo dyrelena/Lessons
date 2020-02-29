@@ -9,7 +9,7 @@ namespace PrinterMFU
             Xerox test = new ColorXeroxA4();
             test.Copy("Paper Source - New copy");
 
-            MFU test1 = new MFU(new ColorPrinter(), new ScannerA4(), new ColorXeroxA4());
+            MFU test1 = new MFUColorA4 (new ColorPrinter(), new ScannerA4(), new ColorXeroxA4());
             string document = test1.Scan("text from paper source");
             test1.Print(document);
             test1.Copy("Paper Source - 1 - New copy");
@@ -55,18 +55,12 @@ namespace PrinterMFU
         }
     }
 
-    class MFU
+    abstract class MFU
     {
-        MyPrinter printer;
-        MyScanner scanner;
-        Xerox xerox;
-
-        public MFU(MyPrinter printer, MyScanner scanner, Xerox xerox)
-        {
-            this.printer = printer;
-            this.scanner = scanner;
-            this.xerox = xerox;
-        }
+        public MyPrinter printer;
+        public MyScanner scanner;
+        public Xerox xerox;
+      
         public void Print(string someFile)
         {
             this.printer.Print(someFile);
@@ -81,6 +75,15 @@ namespace PrinterMFU
         }
     }
 
+    class MFUColorA4 : MFU
+    {
+        public MFUColorA4(ColorPrinter colorPrinter, ScannerA4 scannerA4, ColorXeroxA4 colorXeroxA) 
+        {
+            printer = colorPrinter;
+            scanner = scannerA4;
+            xerox = colorXeroxA;
+        }
+    }
     //preconditions
 
     abstract class MyPrinter
