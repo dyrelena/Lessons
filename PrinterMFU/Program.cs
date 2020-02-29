@@ -9,10 +9,13 @@ namespace PrinterMFU
             Xerox test = new ColorXeroxA4();
             test.Copy("Paper Source - New copy");
 
-            MFU test1 = new MFUColorA4 (new ColorPrinter(), new ScannerA4(), new ColorXeroxA4());
+            MFU test1 = new MFUColorA4 (new ColorPrinter(), new ScannerA4());
             string document = test1.Scan("text from paper source");
             test1.Print(document);
             test1.Copy("Paper Source - 1 - New copy");
+
+            IPrinter prn = new MFUColorA4(new ColorPrinter());
+            prn.Print("!!!!!!!!!!!");
 
         }
     }
@@ -35,11 +38,6 @@ namespace PrinterMFU
             printer = new ColorPrinter();
             scanner = new ScannerA4();
         }
-    /*    public override void Copy(string PaperSource)
-        {
-            base.Copy(PaperSource);
-            Console.WriteLine(scanner.GetType());
-        }*/
     }
     class ColorXeroxA3 : Xerox
     {
@@ -48,14 +46,9 @@ namespace PrinterMFU
             printer = new ColorPrinter();
             scanner = new ScannerA3();
         }
-      /*  public override void Copy(string PaperSource)
-        {
-            base.Copy(PaperSource);
-            Console.WriteLine(scanner.GetType());
-        }*/
     }
 
-    abstract class MFU
+    abstract class MFU : IPrinter, IScanner
     {
         public MyPrinter printer;
         public MyScanner scanner;
@@ -76,15 +69,32 @@ namespace PrinterMFU
 
     class MFUColorA4 : MFU
     {
-        public MFUColorA4(ColorPrinter colorPrinter, ScannerA4 scannerA4, ColorXeroxA4 colorXeroxA) 
+        public MFUColorA4(ColorPrinter colorPrinter, ScannerA4 scannerA4) 
         {
             printer = colorPrinter;
+            scanner = scannerA4;
+        }
+        public MFUColorA4(ColorPrinter colorPrinter)
+        {
+            printer = colorPrinter;
+        }
+        public MFUColorA4(ScannerA4 scannerA4)
+        {   
             scanner = scannerA4;
         }
     }
     //preconditions
 
-    abstract class MyPrinter
+        interface IPrinter
+    {
+        void Print(string someFile);
+    }
+
+    interface IScanner
+    {
+        string Scan(string PaperSource);
+    }
+    abstract class MyPrinter : IPrinter
     {
         public readonly bool color;
         public readonly string paperFormat;
@@ -111,7 +121,7 @@ namespace PrinterMFU
         }
     }
 
-    public abstract class MyScanner
+    public abstract class MyScanner : IScanner
     {
         public readonly string format;
         public string document;
